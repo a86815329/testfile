@@ -17,10 +17,10 @@ def init_driver():
     # 解决输入中文
     desired_caps['unicodeKeyboard'] = True
     desired_caps['resetKeyboard'] = True
+    desired_caps['noReset'] = True
 
     # 声明我们的driver对象
     driver = webdriver.Remote('http://127.0.0.1:4723/wd/hub', desired_caps)
-
 
     return driver
 if __name__ == '__main__':

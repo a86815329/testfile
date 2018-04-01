@@ -9,6 +9,8 @@ class BaseAction:
 
     def openFileManager(self):
         self.driver.start_activity('com.cyanogenmod.filemanager', '.com.cyanogenmod.filemanager.activities.NavigationActivity')
+    def click_key(self,keynum):
+        self.driver.keyevent(keynum)
 
     def click(self, loc, time=10, poll=1):
         self.find_element(loc, time, poll).click()
@@ -16,34 +18,62 @@ class BaseAction:
         self.find_elements(loc, time, poll)[1].click()
     def getText(self, loc, time=10, poll=1):
         return self.find_element(loc, time, poll)
+    def getTexts(self, loc, time=10, poll=1):
+        return self.find_elements(loc, time, poll)[len(self.find_elements(loc, time, poll)) - 1]
+    def getTextArray(self, loc, time=10, poll=1):
+        self.textlist = []
+        for i in self.find_elements(loc, time, poll):
+            self.textlist.append(i.text)
+        return self.textlist
 
     def input_text(self, loc, text, time=10, poll=1):
         self.find_element(loc,time,poll).clear()
         self.find_element(loc, time, poll).send_keys(text)
-    def find_dir(self):
+    def click_find_dir(self,dir):
+        self.find_dir(dir).click()
+    def find_dir(self,dir):
         while True:
             # 滑动屏幕
             self.driver.swipe(188, 659, 148, 248)
 
-            # 定义函数find（）找出元素“关于手机”并返回
             def find():
                 find_el = self.driver.find_elements_by_class_name("android.widget.TextView")
                 for i in find_el:
-                    if i.text == "zzz":
+                    if i.text == dir:
+                        return i
+                    elif i.text == "allpairs.rar":
                         return i
 
             try:
-                # 找到元素后点击
-                find().click()
+                find()
+
                 # time.sleep(1)
                 # 找到安卓版本并打印
                 # print(driver.find_elements_by_id("android:id/summary")[2].text)
                 # 完成后进行判断并抛出当前循环
-                if find().text == "zzz":
-                    break
+                if find().text == dir:
+                    return find()
+                elif find().text == "allpairs.rar":
+                    return None
             except AttributeError:
                 pass
+    def find_dir_aaa(self):
+        find_el = self.driver.find_elements_by_class_name("android.widget.TextView")
+        for i in find_el:
+            if i.text == "aaa":
+                return True
 
+    def find_aaa_not_in_screen(self):
+        while True:
+            # 滑动屏幕
+            self.driver.swipe(188, 659, 148, 248)
+
+            array = []
+            find_el = self.driver.find_elements_by_class_name("android.widget.TextView")
+            for i in find_el:
+                array.append(i.text)
+            if "aaa" not in array:
+                break
     def find_element(self, loc, time, poll):
         # By.XPATH,            ("text", "显示")
         loc_by, loc_value = loc
